@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Couples Dynamics Assessment</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  --cream: #F5F0E8;
+  --warm-white: #FAFAF7;
+  --sand: #E8E0D0;
+  --stone: #C4B8A5;
+  --taupe: #9B8E7E;
+  --navy: #1B2838;
+  --navy-light: #2A3A4E;
+  --navy-muted: #3D5068;
+  --sage: #7A8B6F;
+  --sage-light: #A8B89C;
+  --terracotta: #B87955;
+  --terracotta-light: #D4A07A;
+  --plum: #6B4C5E;
+  --text-primary: #1B2838;
+  --text-secondary: #5A5347;
+  --text-muted: #8A8278;
+  --border: #DDD6CA;
+  --shadow-sm: 0 1px 3px rgba(27,40,56,0.06);
+  --shadow-md: 0 4px 16px rgba(27,40,56,0.08);
+  --shadow-lg: 0 8px 32px rgba(27,40,56,0.12);
+  --transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.screen {
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  min-height: 100vh;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.screen.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── TEXTURE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── INTRO SCREEN ─── */
+#intro {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.intro-ornament {
+  position: absolute;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.intro-ornament--top {
+  top: -40px;
+  right: -60px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 1px solid var(--navy);
+}
+
+.intro-ornament--bottom {
+  bottom: -80px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  border: 1px solid var(--navy);
+}
+
+.intro-container {
+  max-width: 640px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.intro-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  border: 1px solid var(--border);
+  padding: 0.45rem 1.2rem;
+  border-radius: 2px;
+  margin-bottom: 2.5rem;
+  font-weight: 500;
+}
+
+.intro-container h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--navy);
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.intro-container h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--terracotta);
+}
+
+.intro-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto 2.5rem;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.intro-credibility {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.intro-credibility-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.intro-credibility-item svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--sage);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.intro-time {
+  font-size: 0.82rem;
+  color: var(--taupe);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.intro-time svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--taupe);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 1rem 2.8rem;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.btn-primary:hover {
+  background: var(--navy-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--navy);
+  border: 1px solid var(--navy);
+}
+
+.btn-secondary:hover {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.btn-cta {
+  background: var(--terracotta);
+  color: white;
+  font-size: 0.92rem;
+  padding: 1.1rem 3rem;
+}
+
+.btn-cta:hover {
+  background: var(--terracotta-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ─── NAMES SCREEN ─── */
+#names {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.names-container {
+  max-width: 520px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.names-container h2 {
+  font-size: 2rem;
+  color: var(--navy);
+  margin-bottom: 0.6rem;
+  text-align: center;
+}
+
+.names-sub {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--warm-white);
+  color: var(--text-primary);
+  transition: border-color var(--transition);
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: var(--navy-muted);
+}
+
+.form-group input::placeholder {
+  color: var(--stone);
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 0.75rem;
+  margin: 2rem 0;
+}
+
+.mode-option {
+  flex: 1;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--warm-white);
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition);
+}
+
+.mode-option.selected {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.mode-option:hover:not(.selected) {
+  border-color: var(--navy-muted);
+}
+
+.mode-label {
+  font-size: 0.88rem;
+  font-weight: 500;
+  display: block;
+}
+
+.mode-desc {
+  font-size: 0.75rem;
+  opacity: 0.65;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.names-actions {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* ─── ASSESSMENT SCREEN ─── */
+#assessment {
+  padding: 0;
+}
+
+.assessment-header {
+  position: sticky;
+  top: 0;
+  background: rgba(245, 240, 232, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.assessment-header-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progress-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.partner-indicator {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  font-weight: 500;
+}
+
+.partner-indicator strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.progress-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-bar-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 2px;
+  background: var(--sand);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--navy);
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.category-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  text-align: right;
+  padding: 0.4rem 0 0;
+  font-weight: 500;
+}
+
+.assessment-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem 4rem;
+}
+
+.question-container {
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+}
+
+.question-number {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.question-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  color: var(--navy);
+  line-height: 1.45;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+  min-height: 80px;
+  transition: opacity 0.3s ease;
+}
+
+.likert-scale {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.likert-scale::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50px;
+  right: 50px;
+  height: 1px;
+  background: var(--border);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.likert-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  padding: 0.75rem 1.2rem;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s ease;
+}
+
+.likert-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--stone);
+  background: var(--warm-white);
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.likert-option:hover .likert-circle {
+  border-color: var(--navy);
+  transform: scale(1.1);
+}
+
+.likert-option.selected .likert-circle {
+  background: var(--navy);
+  border-color: var(--navy);
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(27,40,56,0.25);
+}
+
+.likert-option.selected .likert-circle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cream);
+  transform: translate(-50%, -50%);
+}
+
+.likert-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.likert-endpoints {
+  display: flex;
+  justify-content: space-between;
+  max-width: 400px;
+  margin: 0 auto 2.5rem;
+}
+
+.likert-endpoints span {
+  font-size: 0.72rem;
+  color: var(--stone);
+  letter-spacing: 0.04em;
+}
+
+.question-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.nav-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.7rem 1.8rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.04em;
+}
+
+.nav-btn:hover {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nav-btn.next-btn {
+  background: var(--navy);
+  color: var(--cream);
+  border-color: var(--navy);
+}
+
+.nav-btn.next-btn:hover {
+  background: var(--navy-light);
+}
+
+/* ─── TRANSITION SCREEN ─── */
+#transition {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.transition-container {
+  max-width: 500px;
+}
+
+.transition-container h2 {
+  font-size: 2.2rem;
+  color: var(--navy);
+  margin-bottom: 0.8rem;
+}
+
+.transition-container p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.transition-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--navy);
+  margin: 0 auto 2rem;
+  opacity: 0.3;
+}
+
+/* ─── CALCULATING SCREEN ─── */
+#calculating {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.calc-container {
+  max-width: 400px;
+}
+
+.calc-container h2 {
+  font-size: 1.8rem;
+  color: var(--navy);
+  margin-bottom: 1rem;
+}
+
+.calc-container p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+.calc-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.calc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--navy);
+  opacity: 0.2;
+  animation: calcPulse 1.4s ease-in-out infinite;
+}
+
+.calc-dot:nth-child(2) { animation-delay: 0.2s; }
+.calc-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes calcPulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.3); }
+}
+
+/* ─── RESULTS SCREEN ─── */
+#results {
+  padding: 0;
+}
+
+.results-hero {
+  background: var(--navy);
+  color: var(--cream);
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.results-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,240,232,0.06);
+  pointer-events: none;
+}
+
+.results-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,240,232,0.04);
+  pointer-events: none;
+}
+
+.results-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid rgba(245,240,232,0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 2px;
+  margin-bottom: 2rem;
+  color: var(--sand);
+}
+
+.results-hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 300;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.results-hero h1 em {
+  font-style: italic;
+  color: var(--terracotta-light);
+}
+
+.results-dynamic-label {
+  font-size: 0.95rem;
+  color: var(--sand);
+  opacity: 0.8;
+  position: relative;
+  z-index: 1;
+}
+
+.results-content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+}
+
+.results-section {
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: resultsFadeIn 0.6s ease forwards;
+}
+
+.results-section:nth-child(1) { animation-delay: 0.2s; }
+.results-section:nth-child(2) { animation-delay: 0.4s; }
+.results-section:nth-child(3) { animation-delay: 0.6s; }
+.results-section:nth-child(4) { animation-delay: 0.8s; }
+.results-section:nth-child(5) { animation-delay: 1.0s; }
+.results-section:nth-child(6) { animation-delay: 1.2s; }
+
+@keyframes resultsFadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.type-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .type-cards { grid-template-columns: 1fr; }
+}
+
+.type-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.type-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+}
+
+.type-card.partner-a::before { background: var(--navy); }
+.type-card.partner-b::before { background: var(--terracotta); }
+
+.type-card-name {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.type-card-type {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  color: var(--navy);
+  margin-bottom: 0.15rem;
+}
+
+.type-card-label {
+  font-size: 0.82rem;
+  color: var(--terracotta);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.type-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.type-card-wing {
+  margin-top: 0.8rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.insight-block {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2rem;
+}
+
+.insight-block h3 {
+  font-size: 1.3rem;
+  color: var(--navy);
+  margin-bottom: 1rem;
+}
+
+.insight-block p, .insight-block li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.insight-list {
+  list-style: none;
+  padding: 0;
+}
+
+.insight-list li {
+  padding: 0.6rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.insight-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--sage);
+}
+
+.insight-list.friction li::before { background: var(--terracotta); }
+.insight-list.growth li::before { background: var(--plum); }
+
+.results-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--navy);
+  margin: 2rem 0;
+  opacity: 0.15;
+}
+
+/* ─── CONVERSION SECTION ─── */
+.conversion-section {
+  background: var(--navy);
+  color: var(--cream);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.conversion-inner {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.conversion-section h2 {
+  font-size: 2rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.conversion-section h2 em {
+  font-style: italic;
+  color: var(--terracotta-light);
+}
+
+.conversion-section p {
+  font-size: 0.92rem;
+  color: var(--sand);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  opacity: 0.85;
+}
+
+.conversion-features {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.conversion-feature {
+  font-size: 0.78rem;
+  color: var(--sand);
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.conversion-feature svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--sage-light);
+  fill: none;
+  stroke-width: 2;
+}
+
+.calendly-placeholder {
+  margin-top: 2rem;
+  padding: 2rem;
+  border: 1px dashed rgba(245,240,232,0.15);
+  border-radius: 3px;
+  color: var(--sand);
+  opacity: 0.5;
+  font-size: 0.8rem;
+}
+
+/* ─── FOOTER ─── */
+.results-footer {
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ─── UTILITY ─── */
+.fade-question {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.fade-question.show {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .likert-option { padding: 0.5rem 0.6rem; }
+  .likert-circle { width: 30px; height: 30px; }
+  .likert-label { font-size: 0.6rem; }
+  .intro-credibility { flex-direction: column; align-items: center; gap: 0.8rem; }
+  .type-card { padding: 1.4rem; }
+  .results-hero { padding: 3rem 1.5rem 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ INTRO ═══════════ -->
+<div id="intro" class="screen active">
+  <div class="intro-ornament intro-ornament--top"></div>
+  <div class="intro-ornament intro-ornament--bottom"></div>
+  <div class="intro-container">
+    <div class="intro-badge">Relationship Assessment</div>
+    <h1>Understand Your Relationship <em>Patterns</em> in 5 Minutes</h1>
+    <p class="intro-subtitle">Discover how you and your partner think, react, and connect — under stress and in daily life. Rooted in motivational psychology and interpersonal dynamics research.</p>
+    <div class="intro-credibility">
+      <div class="intro-credibility-item">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Evidence-informed framework</span>
+      </div>
+      <div class="intro-credibility-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span>~5 minute completion</span>
+      </div>
+      <div class="intro-credibility-item">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>2,400+ couples assessed</span>
+      </div>
+    </div>
+    <div class="intro-time">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 0v10l6 3"/></svg>
+      54 scenario-based questions per partner
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('names')">Start Assessment</button>
+  </div>
+</div>
+
+<!-- ═══════════ NAMES ═══════════ -->
+<div id="names" class="screen">
+  <div class="names-container">
+    <h2>Before We Begin</h2>
+    <p class="names-sub">We'll assess each partner individually, then map your relational patterns.</p>
+    <div class="form-group">
+      <label>Partner A — First Name</label>
+      <input type="text" id="nameA" placeholder="e.g. Jordan" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label>Partner B — First Name</label>
+      <input type="text" id="nameB" placeholder="e.g. Alex" autocomplete="off">
+    </div>
+    <div class="mode-toggle">
+      <div class="mode-option selected" data-mode="together" onclick="selectMode(this)">
+        <span class="mode-label">Take Together</span>
+        <span class="mode-desc">Both present, alternating</span>
+      </div>
+      <div class="mode-option" data-mode="separate" onclick="selectMode(this)">
+        <span class="mode-label">Take Separately</span>
+        <span class="mode-desc">Pass device between turns</span>
+      </div>
+    </div>
+    <div class="names-actions">
+      <button class="btn btn-primary" onclick="startAssessment()">Begin Assessment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ASSESSMENT ═══════════ -->
+<div id="assessment" class="screen">
+  <div class="assessment-header">
+    <div class="assessment-header-inner">
+      <div class="progress-info">
+        <span class="partner-indicator">Assessing: <strong id="currentPartnerName">Partner A</strong></span>
+      </div>
+      <span class="progress-text" id="progressText">1 of 54</span>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="category-label" id="categoryLabel">Core Motivation</div>
+    </div>
+  </div>
+  <div class="assessment-body">
+    <div class="question-container">
+      <div class="question-number" id="questionNumber">Question 01</div>
+      <div class="question-text fade-question show" id="questionText"></div>
+      <div class="likert-scale" id="likertScale">
+        <div class="likert-option" data-value="1" onclick="selectLikert(this)">
+          <div class="likert-circle"></div>
+          <span class="likert-label">Strongly Disagree</span>
+        </div>
+        <div class="likert-option" data-value="2" onclick="selectLikert(this)">
+          <div class="likert-circle"></div>
+          <span class="likert-label">Disagree</span>
+        </div>
+        <div class="likert-option" data-value="3" onclick="selectLikert(this)">
+          <div class="likert-circle"></div>
+          <span class="likert-label">Neutral</span>
+        </div>
+        <div class="likert-option" data-value="4" onclick="selectLikert(this)">
+          <div class="likert-circle"></div>
+          <span class="likert-label">Agree</span>
+        </div>
+        <div class="likert-option" data-value="5" onclick="selectLikert(this)">
+          <div class="likert-circle"></div>
+          <span class="likert-label">Strongly Agree</span>
+        </div>
+      </div>
+      <div class="question-nav">
+        <button class="nav-btn" id="prevBtn" onclick="prevQuestion()" disabled>Back</button>
+        <button class="nav-btn next-btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TRANSITION ═══════════ -->
+<div id="transition" class="screen">
+  <div class="transition-container">
+    <h2>Thank you, <span id="partnerADone"></span></h2>
+    <div class="transition-divider"></div>
+    <p>Now it's <strong id="partnerBStart"></strong>'s turn. Please take a quiet moment, then answer based on your own experience — not how you think your partner would respond.</p>
+    <button class="btn btn-primary" onclick="startPartnerB()">Begin <span id="partnerBBtn"></span>'s Assessment</button>
+  </div>
+</div>
+
+<!-- ═══════════ CALCULATING ═══════════ -->
+<div id="calculating" class="screen">
+  <div class="calc-container">
+    <h2>Analyzing Patterns</h2>
+    <p>Mapping relational dynamics between your responses…</p>
+    <div class="calc-dots">
+      <div class="calc-dot"></div>
+      <div class="calc-dot"></div>
+      <div class="calc-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ RESULTS ═══════════ -->
+<div id="results" class="screen">
+  <div class="results-hero">
+    <div class="results-badge">Your Assessment Results</div>
+    <h1 id="resultsHeadline"></h1>
+    <p class="results-dynamic-label" id="resultsDynamic"></p>
+  </div>
+  <div class="results-content" id="resultsContent"></div>
+  <div class="conversion-section">
+    <div class="conversion-inner">
+      <h2>Want to go <em>deeper?</em></h2>
+      <p>A structured couples session can help you understand these patterns in real-time — not as theory, but as lived experience. Most couples report measurable improvement in communication within the first session.</p>
+      <div class="conversion-features">
+        <div class="conversion-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>50-minute guided session</span>
+        </div>
+        <div class="conversion-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Personalized to your results</span>
+        </div>
+        <div class="conversion-feature">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Licensed practitioner</span>
+        </div>
+      </div>
+      <button class="btn btn-cta" onclick="document.getElementById('calendlyEmbed').scrollIntoView({behavior:'smooth'})">Book a Couples Session</button>
+      <div class="calendly-placeholder" id="calendlyEmbed">
+        <!-- Calendly inline widget embed code goes here -->
+        Calendly scheduling widget will load here<br>
+        <small>Replace with: &lt;div class="calendly-inline-widget" data-url="https://calendly.com/YOUR_LINK"&gt;&lt;/div&gt;</small>
+      </div>
+    </div>
+  </div>
+  <div class="results-footer">
+    This assessment is for educational purposes and does not constitute clinical diagnosis.<br>
+    &copy; 2026 Couples Dynamics Assessment. All rights reserved.
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+const state = {
+  nameA: '',
+  nameB: '',
+  mode: 'together',
+  currentPartner: 'A',
+  currentQuestion: 0,
+  answersA: [],
+  answersB: [],
+  typeA: null,
+  typeB: null,
+  wingA: null,
+  wingB: null
+};
+
+// ═══════════════════════════════════════════════════════
+// QUESTIONS (54 total)
+// Each: { text, category, type (1-9), weight }
+// Categories: CM=Core Motivation, CS=Conflict Style, EN=Emotional Needs, CP=Communication Pattern, SR=Stress Response
+// ═══════════════════════════════════════════════════════
+const questions = [
+  // ── TYPE 1: The Reformer ──
+  { text: "When I notice something done carelessly — a crooked picture, an unclear plan — I feel a pull to correct it, even if no one else seems bothered.", category: "CM", type: 1, weight: 1.2 },
+  { text: "I hold myself to an internal standard that most people around me probably aren't aware of.", category: "CM", type: 1, weight: 1.0 },
+  { text: "During disagreements, I tend to focus on what's fair or right, sometimes at the expense of how the other person feels.", category: "CS", type: 1, weight: 1.1 },
+  { text: "I feel a quiet resentment when I'm doing things 'correctly' and others aren't held to the same expectation.", category: "EN", type: 1, weight: 1.0 },
+  { text: "Under stress, I become more rigid in my expectations of myself and those closest to me.", category: "SR", type: 1, weight: 1.1 },
+  { text: "I sometimes rehearse what I should have said in a conflict, trying to find the most precise and accurate version.", category: "CP", type: 1, weight: 1.0 },
+
+  // ── TYPE 2: The Helper ──
+  { text: "I often feel responsible for other people's emotional well-being, even when it's not explicitly asked of me.", category: "CM", type: 2, weight: 1.2 },
+  { text: "I can sense what someone needs before they say it — and I find it difficult not to act on that awareness.", category: "CM", type: 2, weight: 1.0 },
+  { text: "In conflict, I'm more likely to focus on what the other person is feeling than on my own frustration.", category: "CS", type: 2, weight: 1.1 },
+  { text: "I feel hurt when the care I give is not acknowledged, but I struggle to ask for recognition directly.", category: "EN", type: 2, weight: 1.1 },
+  { text: "When I'm overwhelmed, I become more emotionally demanding — needing reassurance that I matter.", category: "SR", type: 2, weight: 1.0 },
+  { text: "I sometimes give advice or help without being asked, and feel confused when it isn't welcomed.", category: "CP", type: 2, weight: 1.0 },
+
+  // ── TYPE 3: The Achiever ──
+  { text: "I measure how my day went by what I accomplished, not by how I felt during it.", category: "CM", type: 3, weight: 1.2 },
+  { text: "I unconsciously adjust my presentation depending on the group I'm in — not to deceive, but to be effective.", category: "CM", type: 3, weight: 1.1 },
+  { text: "During an argument, I try to resolve things quickly so I can move forward — lingering in the feeling frustrates me.", category: "CS", type: 3, weight: 1.0 },
+  { text: "I struggle when I feel like my partner sees me as failing at the relationship, even if they don't say it.", category: "EN", type: 3, weight: 1.0 },
+  { text: "Under pressure, I default to doing more — staying busy, checking tasks off — to avoid sitting with discomfort.", category: "SR", type: 3, weight: 1.1 },
+  { text: "When sharing something difficult, I tend to frame it in terms of outcomes rather than raw emotion.", category: "CP", type: 3, weight: 1.0 },
+
+  // ── TYPE 4: The Individualist ──
+  { text: "I often feel that something essential about me is different from most people — and I'm unsure whether that's a gift or a wound.", category: "CM", type: 4, weight: 1.2 },
+  { text: "I'm drawn to emotional depth and find surface-level conversation draining over time.", category: "CM", type: 4, weight: 1.0 },
+  { text: "In disagreements, I need my partner to acknowledge the emotional reality of the situation before I can engage with solutions.", category: "CS", type: 4, weight: 1.1 },
+  { text: "I sometimes feel that no one fully understands my inner experience, even people who love me deeply.", category: "EN", type: 4, weight: 1.1 },
+  { text: "When stressed, I withdraw into my own emotional world and can become difficult to reach.", category: "SR", type: 4, weight: 1.0 },
+  { text: "I express dissatisfaction through mood and tone more often than through direct statements.", category: "CP", type: 4, weight: 1.0 },
+
+  // ── TYPE 5: The Investigator ──
+  { text: "Before engaging with a problem — especially an emotional one — I need time alone to think it through.", category: "CM", type: 5, weight: 1.2 },
+  { text: "I feel protective of my time and energy, and I notice when others require more of me than I expected to give.", category: "CM", type: 5, weight: 1.1 },
+  { text: "In conflict, I tend to detach and analyze the situation rather than react emotionally.", category: "CS", type: 5, weight: 1.1 },
+  { text: "I feel most connected when my partner respects my need for solitude without interpreting it as rejection.", category: "EN", type: 5, weight: 1.0 },
+  { text: "Under stress, I minimize my needs and pull inward — becoming less available, not more.", category: "SR", type: 5, weight: 1.0 },
+  { text: "I prefer to communicate important things in writing or after careful thought, rather than in the heat of the moment.", category: "CP", type: 5, weight: 1.0 },
+
+  // ── TYPE 6: The Loyalist ──
+  { text: "I often imagine worst-case scenarios — not because I'm pessimistic, but because I want to be prepared.", category: "CM", type: 6, weight: 1.2 },
+  { text: "Trust is something I build slowly, and even in close relationships, I occasionally test it without meaning to.", category: "CM", type: 6, weight: 1.1 },
+  { text: "In conflict, I sometimes oscillate between seeking reassurance and pushing the other person to prove their loyalty.", category: "CS", type: 6, weight: 1.0 },
+  { text: "I need my partner to be consistent — unpredictable behavior, even small shifts in tone, can feel unsettling.", category: "EN", type: 6, weight: 1.1 },
+  { text: "Under stress, I become more suspicious of others' motives, even those of people I deeply love.", category: "SR", type: 6, weight: 1.1 },
+  { text: "I tend to ask a lot of clarifying questions, which others sometimes misread as doubt or distrust.", category: "CP", type: 6, weight: 1.0 },
+
+  // ── TYPE 7: The Enthusiast ──
+  { text: "When something painful or boring surfaces, my instinct is to pivot — to find a more engaging angle or change the subject.", category: "CM", type: 7, weight: 1.2 },
+  { text: "I feel most alive when there are possibilities ahead — stagnation or repetition drains me.", category: "CM", type: 7, weight: 1.0 },
+  { text: "In arguments, I tend to reframe the situation positively, which my partner sometimes reads as dismissing their feelings.", category: "CS", type: 7, weight: 1.1 },
+  { text: "I struggle when I feel trapped in a negative emotional state with no clear way out.", category: "EN", type: 7, weight: 1.0 },
+  { text: "Under stress, I scatter my attention across many things — planning, socializing, acquiring — anything to avoid sitting still.", category: "SR", type: 7, weight: 1.1 },
+  { text: "I sometimes talk through problems out loud at a pace others find hard to follow, jumping from idea to idea.", category: "CP", type: 7, weight: 1.0 },
+
+  // ── TYPE 8: The Challenger ──
+  { text: "I move toward conflict instinctively — not because I enjoy fighting, but because unspoken tension feels worse.", category: "CM", type: 8, weight: 1.2 },
+  { text: "I have strong reactions to situations where someone is being controlled or treated unfairly.", category: "CM", type: 8, weight: 1.0 },
+  { text: "In disagreements, I can become forceful without realizing how much space I'm taking up.", category: "CS", type: 8, weight: 1.1 },
+  { text: "I need my partner to be direct with me — I'd rather hear a hard truth than a softened version.", category: "EN", type: 8, weight: 1.0 },
+  { text: "When stressed, I become more controlling of my environment — needing to take charge and make decisions quickly.", category: "SR", type: 8, weight: 1.1 },
+  { text: "I express vulnerability rarely, and when I do, I need it to be met without judgment or pity.", category: "CP", type: 8, weight: 1.0 },
+
+  // ── TYPE 9: The Peacemaker ──
+  { text: "When tension arises, I tend to minimize my own needs to keep things calm.", category: "CM", type: 9, weight: 1.2 },
+  { text: "I often merge with my partner's preferences — choosing their restaurant, adopting their opinions — and later feel invisible.", category: "CM", type: 9, weight: 1.1 },
+  { text: "In conflict, I go along to keep the peace, but resentment builds quietly beneath the surface.", category: "CS", type: 9, weight: 1.1 },
+  { text: "I need my partner to directly ask what I want — I struggle to volunteer my own desires unprompted.", category: "EN", type: 9, weight: 1.0 },
+  { text: "Under stress, I numb out — turning to routines, comfort activities, or mental disengagement to avoid difficult feelings.", category: "SR", type: 9, weight: 1.0 },
+  { text: "I communicate important things indirectly, often hinting at what I need rather than stating it clearly.", category: "CP", type: 9, weight: 1.0 }
+];
+
+// ═══════════════════════════════════════════════════════
+// ENNEAGRAM DATA
+// ═══════════════════════════════════════════════════════
+const typeNames = {
+  1: "The Reformer",
+  2: "The Helper",
+  3: "The Achiever",
+  4: "The Individualist",
+  5: "The Investigator",
+  6: "The Loyalist",
+  7: "The Enthusiast",
+  8: "The Challenger",
+  9: "The Peacemaker"
+};
+
+const typeDescriptions = {
+  1: "Driven by an internal compass of integrity, you hold yourself and your world to a high standard. You see what could be better and feel compelled to act on it. Your gift is moral clarity; your challenge is releasing the belief that you must be perfect to be good.",
+  2: "You orient toward others instinctively — reading needs, offering warmth, building connection through care. Your presence makes people feel seen. Your challenge is learning that you are worthy of love even when you aren't giving anything.",
+  3: "You're wired for impact. You move through the world with purpose, adapting skillfully to what each situation requires. Your gift is inspiring others through action. Your challenge is learning that who you are matters more than what you achieve.",
+  4: "You live in emotional depth that most people rarely access. You find meaning in beauty, longing, and authentic self-expression. Your gift is emotional honesty. Your challenge is trusting that your inherent worth doesn't depend on being uniquely understood.",
+  5: "You approach the world through observation and understanding. You conserve your energy carefully, preferring depth over breadth. Your gift is clarity of thought. Your challenge is learning that engagement with the world replenishes rather than depletes you.",
+  6: "You think ahead, anticipate risks, and build loyalty through tested trust. You are dependable and deeply committed once you feel safe. Your gift is faithful perseverance. Your challenge is learning that security comes from within, not from certainty.",
+  7: "You pursue experience, variety, and joy. You're energized by possibility and bring optimism to those around you. Your gift is resilience and vision. Your challenge is learning that depth — even painful depth — is not a trap but a doorway.",
+  8: "You meet the world with directness and intensity. You protect what matters to you and refuse to be controlled. Your gift is strength and truth-telling. Your challenge is learning that vulnerability is not weakness — it's the foundation of real intimacy.",
+  9: "You create harmony instinctively, bridging differences and holding space for others. Your gift is steady, grounding presence. Your challenge is learning that your own voice, preferences, and anger are not threats to love — they are essential to it."
+};
+
+const wings = {
+  1: [9, 2], 2: [1, 3], 3: [2, 4], 4: [3, 5],
+  5: [4, 6], 6: [5, 7], 7: [6, 8], 8: [7, 9], 9: [8, 1]
+};
+
+// ═══════════════════════════════════════════════════════
+// RELATIONSHIP DYNAMICS
+// ═══════════════════════════════════════════════════════
+function getRelationshipData(tA, tB) {
+  const key = Math.min(tA, tB) + '-' + Math.max(tA, tB);
+  const isSame = tA === tB;
+
+  const dynamics = {
+    '1-1': {
+      summary: "Two reformers create a principled, structured partnership. You share a deep commitment to doing things right and an unspoken code of integrity.",
+      strengths: ["Mutual respect for each other's standards and ethics", "Shared drive toward improvement and growth", "Reliability — both partners follow through on commitments", "A moral foundation that creates deep trust over time"],
+      friction: ["Competing visions of 'the right way' can lead to rigid standoffs", "Criticism can compound — each partner amplifying the other's inner critic", "Difficulty relaxing or allowing imperfection in the relationship", "Resentment may simmer beneath a composed surface"],
+      communication: "Both partners may assume their perspective is objectively correct, making compromise feel like concession. Arguments often center on principle rather than feeling.",
+      growth: ["Practice saying 'I feel' before 'I think' — lead with emotion, not judgment", "Schedule unstructured, playful time with no agenda or outcome", "When you notice the urge to correct, pause and ask: 'Is this about principle or about control?'", "Celebrate effort and intention, not just outcomes"]
+    },
+    '1-2': {
+      summary: "The Reformer's principled clarity meets the Helper's emotional warmth. This pairing can create deep, purposeful partnership when both feel valued.",
+      strengths: ["Shared desire to contribute meaningfully to others' lives", "The Helper softens the Reformer's rigidity with emotional attunement", "The Reformer provides structure that helps the Helper set boundaries", "Both are conscientious and attentive to responsibility"],
+      friction: ["The Reformer may feel the Helper's care is conditional or manipulative", "The Helper may feel criticized rather than appreciated", "Disagreements about whether logic or emotion should guide decisions", "The Helper gives; the Reformer evaluates — this can feel transactional"],
+      communication: "The Reformer speaks in terms of standards; the Helper speaks in terms of needs. Without translation, both feel unheard.",
+      growth: ["Reformer: practice receiving help without critiquing how it's offered", "Helper: express your needs directly instead of hoping they'll be noticed", "Create a shared ritual of gratitude — specific, not generic", "When conflict arises, name the emotion underneath the position"]
+    },
+    '1-3': {
+      summary: "Both driven by excellence but through different lenses — the Reformer through integrity, the Achiever through impact. A powerful pairing when aligned.",
+      strengths: ["Shared work ethic and drive to improve", "Mutual admiration for competence and follow-through", "Both value self-improvement and personal growth", "Can be a highly productive and respected partnership"],
+      friction: ["The Reformer may view the Achiever's image-consciousness as superficial", "The Achiever may experience the Reformer's standards as inflexible and slowing", "Both suppress emotion — creating an efficiency-focused but emotionally thin dynamic", "Competition for 'who's doing it better' can emerge subtly"],
+      communication: "Both prefer to discuss problems in terms of solutions. The emotional undercurrent of disagreements often goes unaddressed.",
+      growth: ["Schedule conversations with no agenda — just presence", "Practice vulnerability by sharing something unfinished or uncertain", "Achiever: slow down enough to notice your partner's emotional state", "Reformer: recognize that effectiveness is a form of care, not avoidance"]
+    },
+    '1-4': {
+      summary: "Principle meets depth. The Reformer's structured clarity and the Individualist's emotional intensity create a dynamic of mutual fascination and occasional bewilderment.",
+      strengths: ["Both value authenticity — one in action, the other in feeling", "The Individualist brings emotional richness the Reformer secretly craves", "The Reformer offers grounding stability the Individualist needs", "Deep, meaningful conversations about values and meaning"],
+      friction: ["The Reformer may dismiss the Individualist's emotions as self-indulgent", "The Individualist may experience the Reformer as emotionally rigid or cold", "Different relationship rhythms — one needs space for feeling, the other for order", "The Individualist's moodiness can trigger the Reformer's need for control"],
+      communication: "The Reformer speaks in shoulds; the Individualist speaks in feelings. Both can feel the other is speaking a foreign language.",
+      growth: ["Reformer: sit with your partner's sadness without trying to fix it", "Individualist: recognize that structure can be an expression of love, not suppression", "Practice mirroring each other's language before responding", "Designate time for emotional processing that has a beginning and end"]
+    },
+    '1-5': {
+      summary: "Two internally-oriented types who value competence, clarity, and autonomy. This pairing creates intellectual partnership with quiet intimacy.",
+      strengths: ["Mutual respect for each other's independence and inner world", "Shared preference for thoughtful, precise communication", "Both value integrity and intellectual honesty", "Low drama — a calm, stable relational environment"],
+      friction: ["Emotional detachment can create a connection that feels cerebral but distant", "Neither partner naturally initiates emotional vulnerability", "The Reformer's desire to improve things may intrude on the Investigator's boundaries", "Silence can be comfortable or avoidant — difficult to tell which"],
+      communication: "Both are more comfortable with ideas than emotions. Important feelings may go unexpressed for long periods.",
+      growth: ["Set a weekly emotional check-in — even if it feels formal at first", "Practice physical affection as a language that bypasses the analytical mind", "Share something vulnerable each week that you haven't fully processed yet", "Investigator: let your partner into your inner world before you've organized it"]
+    },
+    '1-6': {
+      summary: "Structure meets vigilance. Both partners value responsibility and preparation, creating a stable but sometimes anxious dynamic.",
+      strengths: ["Deep mutual commitment and reliability", "Shared respect for duty, planning, and follow-through", "Both work hard to maintain safety and order in the relationship", "The Loyalist's warmth can soften the Reformer's rigidity"],
+      friction: ["Anxiety can compound — each partner reinforcing the other's worst-case thinking", "The Reformer's certainty may trigger the Loyalist's authority sensitivity", "Both can become rigid under stress — creating a household that's stable but tense", "The Loyalist's questioning may feel like criticism to the Reformer"],
+      communication: "The Reformer states positions; the Loyalist questions them. This can create a productive dialectic or an exhausting loop.",
+      growth: ["Practice reassurance that is specific, not generic", "When anxiety rises, ask: 'Is this real or is this fear?'", "Reformer: soften your delivery — your certainty can feel like pressure", "Loyalist: trust your own judgment more — you don't always need your partner's validation"]
+    },
+    '1-7': {
+      summary: "Discipline meets spontaneity. This pairing creates both creative friction and genuine complementarity — each has what the other needs.",
+      strengths: ["The Enthusiast brings levity and joy the Reformer needs", "The Reformer provides focus and grounding the Enthusiast needs", "Together they can balance vision with execution", "Both are idealistic — one about how things should be, the other about what's possible"],
+      friction: ["The Reformer may see the Enthusiast as irresponsible or scattered", "The Enthusiast may feel the Reformer is rigid, critical, or no fun", "Fundamentally different approaches to discomfort — one confronts, the other evades", "The Enthusiast's reframing can feel dismissive of the Reformer's concerns"],
+      communication: "The Reformer wants to address problems directly; the Enthusiast wants to move past them. Both feel the other's approach is avoidance.",
+      growth: ["Reformer: let yourself be delighted — schedule play without guilt", "Enthusiast: practice staying with one difficult topic to completion", "Appreciate what your partner's approach offers that yours cannot", "Negotiate structure vs. spontaneity in specific, concrete terms"]
+    },
+    '1-8': {
+      summary: "Two strong-willed types who share a commitment to justice but express it differently — one through principle, the other through power.",
+      strengths: ["Both bring conviction and willingness to act on their values", "Mutual respect for directness and honesty", "Can be a formidable partnership when fighting for a shared cause", "Both value integrity and follow-through"],
+      friction: ["Power struggles over whose approach is right", "The Reformer may view the Challenger's intensity as excessive or crude", "The Challenger may see the Reformer's restraint as passive-aggressive", "Neither naturally yields — conflicts can become entrenched"],
+      communication: "Both are direct, but the Reformer leads with principle while the Challenger leads with force. This can feel like moral judgment vs. aggression.",
+      growth: ["Establish explicit rules of engagement for disagreements", "Practice taking turns being the one who yields first", "Reformer: express anger directly instead of channeling it into criticism", "Challenger: slow your intensity to match your partner's processing speed"]
+    },
+    '1-9': {
+      summary: "Order meets peace. The Reformer and Peacemaker share a desire for harmony but arrive there differently — one through standards, the other through acceptance.",
+      strengths: ["The Peacemaker's calm steadiness soothes the Reformer's inner tension", "The Reformer's clarity helps the Peacemaker find direction", "Both value stability and predictability in daily life", "A quietly nurturing dynamic when both feel heard"],
+      friction: ["The Reformer may push while the Peacemaker withdraws — creating a pursue-avoid cycle", "The Peacemaker's passivity can frustrate the Reformer's need for engagement", "Anger goes underground in both — the Reformer suppresses it as criticism, the Peacemaker as numbness", "The Reformer may unknowingly dominate decision-making"],
+      communication: "The Reformer communicates clearly but can be critical; the Peacemaker communicates indirectly and can be evasive. Important things may go unsaid.",
+      growth: ["Peacemaker: practice expressing a preference before being asked", "Reformer: ask open-ended questions and wait — don't fill the silence", "Create low-stakes opportunities for the Peacemaker to lead", "Both: practice naming anger when it arises, not after it's calcified"]
+    },
+    '2-2': {
+      summary: "Two Helpers create a relationship rich in warmth, attentiveness, and mutual care — but may struggle to identify and express their own needs.",
+      strengths: ["Deep emotional attunement and generosity", "Both partners feel genuinely cared for", "Strong nurturing foundation for family and community", "Intuitive understanding of each other's emotional landscape"],
+      friction: ["Competition over who gives more — or who's more selfless", "Both may avoid stating their own needs, leading to mutual resentment", "Emotional manipulation can emerge unconsciously when needs go unmet", "The relationship may lack challenge or honest confrontation"],
+      communication: "Both speak fluently in the language of care, but may struggle to communicate boundaries, frustration, or personal desire.",
+      growth: ["Practice asking for what you need — specifically and directly", "Create space for healthy selfishness without guilt", "Notice when 'helping' is actually a way of controlling the dynamic", "Celebrate each other's independence as much as your togetherness"]
+    },
+    '2-3': {
+      summary: "The Helper's warmth and the Achiever's drive create an outwardly impressive and socially fluent partnership. The risk is performing closeness rather than experiencing it.",
+      strengths: ["Both are socially skilled and attuned to others", "The Helper provides emotional warmth the Achiever secretly needs", "The Achiever provides direction and ambition the Helper admires", "Strong partnership for building something together — a family, a business, a legacy"],
+      friction: ["The Helper may feel used for support without receiving emotional depth in return", "The Achiever may view the Helper's needs as distracting from goals", "Both can prioritize image — how the relationship looks to others", "The Helper's emotional needs may be dismissed as 'too much'"],
+      communication: "The Helper speaks in emotions; the Achiever speaks in outcomes. Without effort, the Achiever may manage rather than connect.",
+      growth: ["Achiever: schedule uninterrupted emotional time — treat it like a priority, not an afterthought", "Helper: express frustration before it becomes martyrdom", "Practice being vulnerable in private, not just polished in public", "Ask each other: 'What do you need from me right now?' — and listen"]
+    },
+    '2-4': {
+      summary: "Deep emotional connection defines this pairing. The Helper's warmth meets the Individualist's depth, creating a relationship of intensity and meaning.",
+      strengths: ["Both value emotional authenticity above all else", "Deep, meaningful conversations come naturally", "The Helper makes the Individualist feel truly seen", "The Individualist gives the Helper access to emotional depths they crave"],
+      friction: ["Both can become emotionally reactive, amplifying each other's feelings", "The Helper may feel the Individualist is too self-focused", "The Individualist may feel the Helper's care is smothering or performative", "Emotional volatility can make the relationship feel unstable"],
+      communication: "Both are emotionally fluent, but their emotional languages differ — one gives, the other expresses. Misalignment creates a cycle of offering and withdrawing.",
+      growth: ["Establish emotional boundaries — not everything needs to be processed together", "Helper: allow your partner space without interpreting withdrawal as rejection", "Individualist: receive care graciously, even when it doesn't arrive in your preferred form", "Practice being present to each other's joy, not just each other's pain"]
+    },
+    '2-5': {
+      summary: "Warmth meets distance. The Helper and Investigator are drawn together by what each lacks — creating a relationship of profound complementarity and profound frustration.",
+      strengths: ["The Helper brings warmth that softens the Investigator's isolation", "The Investigator brings calm that stabilizes the Helper's emotional intensity", "Both deeply appreciate being truly known by another person", "When it works, this pairing creates rare intimacy — depth without performance"],
+      friction: ["Fundamental difference in need for closeness vs. space", "The Helper may feel rejected by the Investigator's withdrawal", "The Investigator may feel overwhelmed by the Helper's emotional demands", "A classic pursue-withdraw cycle can develop quickly"],
+      communication: "The Helper reaches out; the Investigator pulls back. Both behaviors intensify the other, creating a painful but familiar loop.",
+      growth: ["Establish clear agreements about alone time vs. connection time", "Helper: practice self-soothing when your partner needs space — it's not personal", "Investigator: communicate your need for solitude before you withdraw — narrate, don't disappear", "Find shared activities that allow closeness without emotional pressure — walking, cooking, reading together"]
+    },
+    '2-6': {
+      summary: "Care meets commitment. Both partners value loyalty and reliability, creating a warm, dedicated partnership anchored in mutual trust.",
+      strengths: ["Both are loyal, attentive, and deeply committed once trust is built", "The Helper's warmth soothes the Loyalist's anxiety", "The Loyalist's consistency provides the Helper with reliable appreciation", "Strong emotional bond built on mutual dependability"],
+      friction: ["The Loyalist's anxiety may trigger the Helper's need to over-function", "The Helper's emotional intensity may overwhelm the Loyalist during stress", "Both can become anxious about the relationship itself — creating a feedback loop", "Difficulty creating independence within the partnership"],
+      communication: "Both seek reassurance, but in different forms — the Helper through appreciation, the Loyalist through consistency. Each may miss what the other is actually asking for.",
+      growth: ["Loyalist: express gratitude specifically and often — your partner needs to hear it", "Helper: trust that your partner's worry isn't about you", "Practice individual interests that don't involve the other person", "When anxiety rises in either partner, name it out loud before acting on it"]
+    },
+    '2-7': {
+      summary: "Generosity meets enthusiasm. This pairing is warm, social, and energetic — but may avoid difficult truths in favor of keeping things pleasant.",
+      strengths: ["High-energy, positive dynamic that others are drawn to", "Both are generous — one with care, the other with experiences", "Natural social fluency as a couple", "Shared optimism and orientation toward others"],
+      friction: ["Both avoid negativity — important issues may go unaddressed", "The Helper may feel the Enthusiast isn't emotionally present enough", "The Enthusiast may feel the Helper's needs are confining", "Depth can get sacrificed for breadth — busy but not intimate"],
+      communication: "Both prefer positive framing, which means difficult conversations get deferred, reframed, or glossed over entirely.",
+      growth: ["Schedule regular, honest check-ins where 'fine' isn't an acceptable answer", "Helper: allow your partner joy that doesn't involve you", "Enthusiast: practice being present to your partner's emotional reality, even when it's uncomfortable", "Learn to sit in silence together — not every moment needs energy"]
+    },
+    '2-8': {
+      summary: "Softness meets strength. The Helper and Challenger are more alike than they appear — both are protective, passionate, and uncomfortable with vulnerability.",
+      strengths: ["Both are action-oriented and decisive when it matters", "The Helper provides emotional connection the Challenger secretly craves", "The Challenger provides strength and directness the Helper admires", "Powerful partnership when both channel their energy toward shared goals"],
+      friction: ["The Challenger's bluntness can wound the Helper deeply", "The Helper's indirect emotional requests frustrate the Challenger", "Power dynamics can become entrenched — one dominates, the other accommodates", "Both struggle to show vulnerability, but in opposite ways"],
+      communication: "The Challenger speaks directly; the Helper speaks through care. Without awareness, one becomes too harsh, the other too indirect.",
+      growth: ["Challenger: soften your delivery without dulling your honesty", "Helper: practice stating needs clearly — your partner respects directness", "Address power imbalances openly — this relationship works only with shared agency", "Practice vulnerability as strength, not as weakness to be protected"]
+    },
+    '2-9': {
+      summary: "Warmth meets stillness. Both are others-oriented and gentle, creating a nurturing, comfortable partnership that may struggle with inertia.",
+      strengths: ["Deeply caring, patient, and accommodating dynamic", "Both prioritize harmony and emotional safety", "Strong nurturing foundation for family", "Mutual acceptance and gentleness"],
+      friction: ["Neither initiates difficult conversations willingly", "The Helper may feel the Peacemaker isn't engaging enough emotionally", "The Peacemaker may feel overwhelmed by the Helper's emotional needs", "Passivity can build until resentment erupts unexpectedly"],
+      communication: "Both communicate indirectly, which creates warmth but also ambiguity. Important things can go unsaid for months.",
+      growth: ["Create structured time to discuss 'what's not working' — gently but honestly", "Helper: practice being still without filling the space with care", "Peacemaker: practice volunteering your opinion before being asked", "Develop individual identities alongside the shared identity of the relationship"]
+    },
+    '3-3': {
+      summary: "Two Achievers create a high-performing, goal-oriented partnership. The risk is building an impressive life that neither partner actually experiences.",
+      strengths: ["Shared ambition and capacity for focused effort", "Mutual understanding of each other's drive", "Impressive external achievements as a couple", "Both value self-improvement and growth"],
+      friction: ["Competition can emerge — consciously or unconsciously", "The relationship may be more performance than intimacy", "Both suppress emotion in favor of productivity", "Identity confusion — who are you when you're not achieving?"],
+      communication: "Both default to discussing plans, goals, and outcomes. Emotional conversations are treated as problems to solve rather than experiences to share.",
+      growth: ["Practice being together with no plan and no outcome", "Share something unfinished, unimpressive, or uncertain with your partner weekly", "Ask: 'How are you actually doing?' — and wait through the first, polished answer", "Celebrate being, not just doing"]
+    },
+    '3-4': {
+      summary: "Performance meets authenticity. The Achiever and Individualist are fascinated by what each offers — success and depth — but may frustrate each other fundamentally.",
+      strengths: ["The Individualist brings emotional depth the Achiever needs", "The Achiever brings grounding the Individualist admires", "Both value self-expression, though in different forms", "Potential for mutual growth as each partner expands their range"],
+      friction: ["The Achiever may see the Individualist's emotions as inefficient", "The Individualist may view the Achiever's adaptability as inauthentic", "Different relationships to image — one curates it, the other rejects it", "The Achiever rushes; the Individualist lingers — pacing conflicts emerge"],
+      communication: "The Achiever speaks in terms of what works; the Individualist speaks in terms of what's real. Both can feel the other is avoiding something essential.",
+      growth: ["Achiever: slow down enough to sit with your partner's emotional reality", "Individualist: appreciate that action can be a form of love, not avoidance", "Find shared creative or expressive activities", "Practice validating each other's approach without converting the other"]
+    },
+    '3-5': {
+      summary: "Efficiency meets depth. Both are competent and self-reliant, creating a partnership of parallel excellence that may lack emotional bridge-building.",
+      strengths: ["Mutual respect for competence and capability", "Both are self-sufficient and don't create dependency", "Intellectual stimulation and shared respect for expertise", "Low-maintenance dynamic — both value efficiency"],
+      friction: ["Emotional connection may be treated as optional", "Neither naturally initiates vulnerability or deep sharing", "The Achiever's social energy may drain the Investigator", "The Investigator's withdrawal may frustrate the Achiever's need for engagement"],
+      communication: "Both prefer efficiency in communication. Emotional nuance gets filtered out, leaving a relationship that works well but may feel hollow.",
+      growth: ["Designate unpressured time for emotional sharing weekly", "Achiever: ask your partner what they're thinking, not just what they're doing", "Investigator: share your inner world before it's fully formed — let your partner in", "Practice physical closeness as a language when words feel inadequate"]
+    },
+    '3-6': {
+      summary: "Drive meets devotion. The Achiever's forward momentum and the Loyalist's stabilizing loyalty create a partnership of action and allegiance.",
+      strengths: ["The Loyalist provides steadfast support for the Achiever's ambitions", "The Achiever provides confidence that reassures the Loyalist", "Both are responsible and committed to shared goals", "Strong team dynamic — one leads, the other supports and troubleshoots"],
+      friction: ["The Loyalist may feel like a support role rather than an equal partner", "The Achiever may become impatient with the Loyalist's need for reassurance", "Under stress, the Achiever accelerates while the Loyalist spirals — creating disconnection", "The Loyalist may question the Achiever's authenticity or motives"],
+      communication: "The Achiever frames things positively; the Loyalist stress-tests them. This can be productive or exhausting depending on the stakes.",
+      growth: ["Achiever: treat your partner's concerns as data, not obstacles", "Loyalist: trust your partner's competence — worry isn't the same as care", "Equalize decision-making power explicitly", "Practice celebrating together without immediately planning what's next"]
+    },
+    '3-7': {
+      summary: "Two high-energy, forward-moving types who share optimism and vision. The risk is building a life that's always accelerating and never arriving.",
+      strengths: ["Shared enthusiasm, energy, and positivity", "Both are adaptable and resilient", "An exciting, dynamic partnership full of projects and plans", "Both are socially skilled and connect easily with others"],
+      friction: ["Neither wants to slow down for difficult emotions", "Depth is sacrificed for momentum", "Both may avoid confronting what isn't working", "The relationship can become a shared performance — exciting but not intimate"],
+      communication: "Both prefer to keep things light and moving. When something genuinely painful surfaces, neither may know how to stay with it.",
+      growth: ["Practice stopping — literally sitting still together in silence", "When something hurts, say it plainly instead of reframing or redirecting", "Achiever: let go of outcome; Enthusiast: let go of stimulation — meet in the quiet", "Build in regular reflection: 'What are we avoiding?'"]
+    },
+    '3-8': {
+      summary: "Two strong, action-oriented types who share drive and directness. A powerful pairing that can build empires — or engage in quiet power struggles.",
+      strengths: ["Mutual respect for strength, competence, and results", "Both are decisive and willing to take charge", "High capacity for getting things done together", "Neither is passive — creating a dynamic, active partnership"],
+      friction: ["Power struggles over leadership and direction", "The Achiever's adaptability may feel dishonest to the Challenger", "The Challenger's intensity may feel threatening to the Achiever's image", "Both resist vulnerability — creating a surface-level emotional dynamic"],
+      communication: "Both are direct, but the Achiever adjusts messaging for impact while the Challenger speaks raw truth. This can feel manipulative to the Challenger and crude to the Achiever.",
+      growth: ["Establish clear domains of responsibility to reduce competition", "Practice yielding power to each other in alternating contexts", "Achiever: drop the performance with your partner — be honest, not polished", "Challenger: recognize that your partner's adaptability isn't dishonesty — it's a different kind of intelligence"]
+    },
+    '3-9': {
+      summary: "Ambition meets acceptance. The Achiever brings energy and direction; the Peacemaker brings calm and unconditional regard.",
+      strengths: ["The Peacemaker's acceptance gives the Achiever rare emotional safety", "The Achiever's energy draws the Peacemaker into engagement and action", "Complementary temperaments — one activates, the other grounds", "Both are adaptable and socially harmonious"],
+      friction: ["The Achiever may unknowingly dominate the relationship's direction", "The Peacemaker may lose themselves in the Achiever's agenda", "The Achiever may become frustrated by the Peacemaker's passivity", "Important topics get avoided — one by redirecting, the other by withdrawing"],
+      communication: "The Achiever communicates with purpose; the Peacemaker communicates with softness. Without care, the Peacemaker's voice gets drowned out.",
+      growth: ["Achiever: actively seek your partner's opinion — and wait for it", "Peacemaker: practice asserting a preference daily, even small ones", "Notice when the Achiever's goals have become the relationship's goals by default", "Create spaces where the Peacemaker leads and the Achiever follows"]
+    },
+    '4-4': {
+      summary: "Two Individualists create a relationship of extraordinary emotional depth and intensity. The gift is rare understanding; the risk is amplified turbulence.",
+      strengths: ["Profound emotional intimacy and mutual understanding", "Both value authenticity above all else", "Creative, expressive dynamic that feeds both partners", "A sense of being truly seen that is difficult to find elsewhere"],
+      friction: ["Emotional storms can compound, with each partner intensifying the other", "Competition over whose pain is deeper or more valid", "Both may romanticize struggle, making contentment feel like settling", "Withdrawal cycles — when both go inward, the relationship goes dark"],
+      communication: "Both communicate through emotional intensity, mood, and symbolic expression. Without grounding, conversations can become beautifully painful but unresolved.",
+      growth: ["Practice grounding rituals — concrete, shared activities that don't require emotional processing", "Designate one partner to hold steady when the other is in emotional flux", "Celebrate ordinary happiness without analyzing it into complexity", "Build routines that create stability beneath the emotional intensity"]
+    },
+    '4-5': {
+      summary: "Depth meets depth — but in different languages. The Individualist's emotional intensity and the Investigator's intellectual intensity create a relationship of quiet, private meaning.",
+      strengths: ["Both value depth over surface interaction", "Mutual respect for each other's inner world", "A private, intimate dynamic that doesn't need external validation", "Both are original thinkers who see the world differently"],
+      friction: ["The Individualist wants emotional expression; the Investigator offers analysis", "The Investigator's withdrawal triggers the Individualist's fear of abandonment", "The Individualist's emotional intensity can overwhelm the Investigator", "Both may retreat into isolation — separately — during stress"],
+      communication: "The Individualist speaks feeling; the Investigator speaks thought. Both are communicating depth, but it doesn't always translate.",
+      growth: ["Investigator: practice naming feelings, even imprecisely — your partner needs to hear them", "Individualist: accept that your partner's silence isn't emptiness — it's processing", "Establish a shared creative or intellectual project that bridges both languages", "Practice physical togetherness that doesn't require conversation"]
+    },
+    '4-6': {
+      summary: "Emotional depth meets steadfast loyalty. Both are aware of life's difficulties, creating a bond built on shared understanding of complexity.",
+      strengths: ["Both take emotional life seriously and don't dismiss difficulty", "The Loyalist's consistency provides safety for the Individualist's volatility", "The Individualist's emotional range expands the Loyalist's self-understanding", "Deepening trust over time — both value genuine connection"],
+      friction: ["The Individualist's mood swings can trigger the Loyalist's anxiety", "The Loyalist's need for reassurance may feel constraining to the Individualist", "Both can spiral into worst-case thinking — emotional and cognitive", "The Individualist's desire for intensity may clash with the Loyalist's desire for stability"],
+      communication: "Both can be reactive under stress — the Individualist emotionally, the Loyalist cognitively. When both react simultaneously, conversations escalate quickly.",
+      growth: ["Create a shared 'calm-down' protocol before engaging in difficult conversations", "Loyalist: trust that your partner's emotional intensity isn't about you", "Individualist: offer reassurance freely — it costs you little and means everything to your partner", "Practice co-regulation: breathing together, walking together, grounding together"]
+    },
+    '4-7': {
+      summary: "Depth meets lightness. The Individualist and Enthusiast are drawn to opposite poles of experience — one seeking meaning through feeling, the other through possibility.",
+      strengths: ["Each partner expands the other's emotional range", "The Enthusiast brings joy and levity the Individualist needs", "The Individualist brings depth and meaning the Enthusiast often avoids", "A creative, dynamic pairing full of aesthetic and experiential richness"],
+      friction: ["The Individualist may feel the Enthusiast is emotionally avoidant", "The Enthusiast may feel the Individualist is stuck in negativity", "Fundamentally different relationships to pain — one explores it, the other escapes it", "The Individualist wants to be understood; the Enthusiast wants to move forward"],
+      communication: "The Individualist dives into emotional complexity; the Enthusiast redirects toward solutions or new topics. Both feel the other is missing the point.",
+      growth: ["Enthusiast: practice staying with one emotion to completion — your partner needs you to witness, not fix", "Individualist: allow yourself to be lifted — not every insight requires descending into darkness", "Set a 'depth-and-breadth' rhythm: deep emotional conversations followed by shared adventures", "Appreciate your differences as complementary, not oppositional"]
+    },
+    '4-8': {
+      summary: "Intensity meets intensity. Both the Individualist and Challenger operate at emotional extremes, creating a passionate, combustible dynamic.",
+      strengths: ["Both value authenticity and reject superficiality", "Deep emotional passion and honest expression", "The Challenger's strength makes the Individualist feel protected", "The Individualist's depth makes the Challenger feel truly known"],
+      friction: ["Both can be reactive — arguments escalate fast and hit hard", "The Challenger's dominance may trigger the Individualist's sense of being unseen", "The Individualist's withdrawal may trigger the Challenger's fear of losing control", "Power dynamics around emotional expression — who gets to feel the most"],
+      communication: "Both communicate with intensity, but the Challenger is direct while the Individualist is expressive. Misreading each other's mode can cause collisions.",
+      growth: ["Establish de-escalation agreements before conflicts arise", "Challenger: recognize that your partner's emotions are not attacks — they're invitations", "Individualist: recognize that your partner's directness is not aggression — it's honesty", "Practice gentleness as a shared discipline"]
+    },
+    '4-9': {
+      summary: "Depth meets calm. The Individualist's emotional intensity and the Peacemaker's gentle steadiness create a relationship of surprising beauty — and surprising frustration.",
+      strengths: ["The Peacemaker's calm grounds the Individualist's emotional turbulence", "The Individualist brings depth and vitality to the Peacemaker's world", "Both value gentleness, beauty, and authentic connection", "A deeply private, intimate dynamic"],
+      friction: ["The Individualist may feel the Peacemaker is emotionally absent or checked out", "The Peacemaker may feel overwhelmed by the Individualist's emotional demands", "Pursue-withdraw dynamic: one reaches out intensely, the other retreats into numbness", "The Peacemaker's agreeableness can feel inauthentic to the Individualist"],
+      communication: "The Individualist communicates through emotional expression; the Peacemaker communicates through presence and absence. When the Individualist wants engagement and the Peacemaker offers silence, both suffer.",
+      growth: ["Peacemaker: practice emotional engagement in small, regular doses — don't wait for crisis", "Individualist: recognize your partner's calm as a gift, not a deficit", "Find shared creative or aesthetic activities that don't require emotional processing", "Establish clear signals for 'I need engagement' and 'I need space'"]
+    },
+    '5-5': {
+      summary: "Two Investigators create a partnership of extraordinary intellectual depth, mutual autonomy, and quiet understanding — with potential for emotional isolation.",
+      strengths: ["Profound respect for each other's boundaries and privacy", "Deep intellectual partnership and shared curiosity", "Both understand the need for solitude without taking it personally", "A calm, low-drama relational environment"],
+      friction: ["Emotional connection may atrophy from neglect", "Both wait for the other to initiate vulnerability — so neither does", "The relationship can become two parallel lives sharing space", "Physical and emotional intimacy may gradually diminish"],
+      communication: "Both prefer precision and brevity. Emotional conversations feel inefficient and are therefore avoided, creating a growing gap.",
+      growth: ["Schedule regular emotional connection — treat it like a non-negotiable commitment", "Practice physical affection daily, even briefly", "Share something unfinished or uncertain each week", "Develop shared experiences outside your individual interests"]
+    },
+    '5-6': {
+      summary: "Analysis meets vigilance. Both are cerebral and cautious, creating a thoughtful partnership anchored in loyalty and intellectual respect.",
+      strengths: ["Both value thinking things through before acting", "The Loyalist's warmth draws the Investigator out of isolation", "The Investigator's calm steadies the Loyalist's anxiety", "Deep, lasting trust built through consistency and reliability"],
+      friction: ["The Loyalist's anxiety may overwhelm the Investigator's need for calm", "The Investigator's detachment may trigger the Loyalist's abandonment fears", "Both can become trapped in analysis — thinking about the relationship instead of being in it", "The Loyalist wants reassurance; the Investigator finds this draining"],
+      communication: "Both process internally before speaking, which can create long silences. The Loyalist eventually needs to talk it out; the Investigator may not be ready.",
+      growth: ["Investigator: offer reassurance proactively — small gestures go far", "Loyalist: practice self-soothing before seeking your partner's validation", "Set a 'worry window' — a specific time to discuss concerns, then let them rest", "Build shared routines that create reliable connection points"]
+    },
+    '5-7': {
+      summary: "Depth meets breadth. The Investigator's focused intensity and the Enthusiast's expansive energy create a relationship of complementary excesses.",
+      strengths: ["The Enthusiast draws the Investigator into the world", "The Investigator provides depth and focus the Enthusiast admires", "Both are intellectually curious and future-oriented", "A stimulating dynamic full of ideas and exploration"],
+      friction: ["Fundamentally different energy needs — one conserves, the other spends", "The Enthusiast's pace may exhaust the Investigator", "The Investigator's need for solitude may frustrate the Enthusiast", "The Enthusiast seeks variety; the Investigator seeks depth — pacing conflicts"],
+      communication: "The Enthusiast talks quickly and broadly; the Investigator speaks carefully and narrowly. Without calibration, neither feels met.",
+      growth: ["Negotiate alone time vs. shared time with specific, agreed-upon rhythms", "Enthusiast: practice slowing down to match your partner's depth — not every topic needs to move fast", "Investigator: practice joining your partner's energy sometimes, even if it's outside your comfort zone", "Find shared activities that satisfy both depth and novelty"]
+    },
+    '5-8': {
+      summary: "Thought meets action. The Investigator and Challenger are both self-reliant and autonomous — one through knowledge, the other through strength.",
+      strengths: ["Deep mutual respect for competence and independence", "The Challenger provides protection and action the Investigator values", "The Investigator provides insight and perspective the Challenger respects", "Both are private — creating a relationship with strong boundaries"],
+      friction: ["The Challenger's intensity may overwhelm the Investigator's need for space", "The Investigator's withdrawal may trigger the Challenger's need for engagement", "Power dynamics around knowledge vs. force", "Emotional expression may be minimal — both avoid vulnerability"],
+      communication: "The Challenger speaks through action and impact; the Investigator speaks through analysis. Without bridge-building, both feel unheard.",
+      growth: ["Challenger: respect your partner's processing time — silence isn't avoidance", "Investigator: practice engaging with your partner's intensity rather than retreating from it", "Establish clear, direct communication protocols — both value honesty", "Practice vulnerability together in low-stakes moments"]
+    },
+    '5-9': {
+      summary: "Two of the most withdrawn types in the system. This pairing creates a calm, respectful, independent dynamic that may drift into disconnection without intentional engagement.",
+      strengths: ["Both value peace, quiet, and personal space", "Mutual respect for boundaries and independence", "A gentle, non-pressured relational environment", "Both are contemplative and thoughtful"],
+      friction: ["Inertia — neither partner pushes toward engagement or growth", "Emotional connection may wither from mutual withdrawal", "Important topics may go permanently unaddressed", "The relationship can become comfortable but stagnant"],
+      communication: "Both prefer to avoid confrontation, which can create a comfortable but dishonest dynamic where problems are never surfaced.",
+      growth: ["Create non-negotiable weekly connection time — dinner, a walk, a conversation", "Practice initiating difficult conversations on a rotating schedule", "Develop shared projects that require active collaboration", "Monitor for drift — if you haven't had a meaningful exchange in a week, that's a signal"]
+    },
+    '6-6': {
+      summary: "Two Loyalists create a partnership of deep commitment, mutual support, and shared vigilance — with potential for anxiety amplification.",
+      strengths: ["Profound loyalty and commitment to each other", "Both understand anxiety and can be compassionate about it", "Shared value of reliability, trustworthiness, and preparation", "A deeply secure bond once trust is fully established"],
+      friction: ["Anxiety can compound — each partner triggering the other's worst fears", "Both may project suspicion or doubt onto the relationship itself", "Decision-making can stall as both seek certainty that doesn't exist", "Reactivity to perceived threats — internal or external — can create instability"],
+      communication: "Both ask a lot of questions and seek reassurance, which can be mutually supportive or mutually exhausting depending on the moment.",
+      growth: ["Practice grounding techniques together when anxiety rises", "Designate one partner to hold calm when the other spirals — and rotate", "Make decisions within a timeframe — don't let analysis paralysis set in", "Celebrate what's working, not just what might go wrong"]
+    },
+    '6-7': {
+      summary: "Caution meets optimism. The Loyalist and Enthusiast are both in the thinking center but orient opposite directions — one toward danger, the other toward possibility.",
+      strengths: ["The Enthusiast's optimism can soothe the Loyalist's anxiety", "The Loyalist's caution can ground the Enthusiast's impulsivity", "Both are mentally active and engaged with the world", "A dynamic, energetic partnership when balanced"],
+      friction: ["The Loyalist may feel the Enthusiast doesn't take concerns seriously", "The Enthusiast may feel the Loyalist's worry is confining", "Different approaches to fear — one prepares for it, the other flees from it", "The Loyalist seeks security; the Enthusiast seeks freedom — fundamental tension"],
+      communication: "The Loyalist raises concerns; the Enthusiast reframes them. Without awareness, the Loyalist feels dismissed and the Enthusiast feels burdened.",
+      growth: ["Enthusiast: when your partner raises a concern, validate it before reframing", "Loyalist: when your partner offers a positive perspective, receive it before rejecting it", "Find a shared adventure that pushes both of you slightly outside your comfort zones", "Practice the question: 'What are you actually afraid of right now?'"]
+    },
+    '6-8': {
+      summary: "Trust meets power. The Loyalist and Challenger share an orientation toward safety, but one seeks it through alliance and the other through dominance.",
+      strengths: ["Both are protective and loyal to those they love", "The Challenger's strength gives the Loyalist rare security", "The Loyalist's devotion gives the Challenger deep trust", "Both value directness and distrust superficiality"],
+      friction: ["The Challenger's dominance can trigger the Loyalist's authority issues", "The Loyalist's questioning can trigger the Challenger's impatience", "Power imbalances can develop quickly if unchecked", "Under stress, the Challenger becomes more controlling and the Loyalist more suspicious"],
+      communication: "The Challenger states positions forcefully; the Loyalist questions them persistently. This can be productive debate or exhausting warfare.",
+      growth: ["Challenger: recognize that your partner's questions come from care, not doubt", "Loyalist: practice trusting your partner's protectiveness without testing it", "Equalize power through explicit agreements and rotating leadership", "Practice gentleness as a shared value — not just strength"]
+    },
+    '6-9': {
+      summary: "Safety meets peace. Both partners prioritize stability and avoiding disruption, creating a reliable, committed partnership that may avoid necessary growth.",
+      strengths: ["Mutual commitment to stability and the relationship itself", "Both are loyal, dependable, and prioritize harmony", "The Peacemaker's calm grounds the Loyalist's anxiety", "The Loyalist's engagement draws the Peacemaker into participation"],
+      friction: ["Both avoid rocking the boat — necessary conversations get deferred indefinitely", "The Loyalist's anxiety may disturb the Peacemaker's equilibrium", "The Peacemaker's passivity may increase the Loyalist's uncertainty", "Stagnation — comfortable but not growing"],
+      communication: "The Loyalist wants to discuss concerns; the Peacemaker wants to avoid them. Without negotiation, the Loyalist talks in circles and the Peacemaker shuts down.",
+      growth: ["Create a safe structure for addressing concerns — regular, low-pressure check-ins", "Loyalist: lead with what you appreciate before raising what worries you", "Peacemaker: practice engaging with your partner's concerns instead of minimizing them", "Set shared goals that push you both gently beyond comfort"]
+    },
+    '7-7': {
+      summary: "Two Enthusiasts create a vibrant, exciting, endlessly stimulating partnership. The risk is building a life that's always moving and never landing.",
+      strengths: ["Boundless energy, creativity, and shared enthusiasm", "Neither partner restricts the other's freedom", "A fun, adventurous, socially rich dynamic", "Both are resilient and optimistic"],
+      friction: ["Neither partner wants to address difficult emotions", "Commitments may be made impulsively and abandoned quickly", "Depth is sacrificed for novelty — important issues are perpetually deferred", "When both partners are in pain, neither knows how to hold still"],
+      communication: "Both speak rapidly and enthusiastically, which feels exciting but can prevent meaningful depth. Conversations may cover a lot of ground without going anywhere.",
+      growth: ["Practice staying with one topic — one emotion — to completion", "Schedule regular honest conversations about what's not working", "Build in stillness: silence, meditation, or simply doing nothing together", "Ask yourselves: 'What are we running from?'"]
+    },
+    '7-8': {
+      summary: "Energy meets intensity. Both the Enthusiast and Challenger are assertive, action-oriented, and resistant to limitation — creating a powerful, expansive dynamic.",
+      strengths: ["Both are energetic, decisive, and action-oriented", "High capacity for shared adventure and ambition", "Neither is passive — creating a dynamic, engaged partnership", "Mutual respect for strength and independence"],
+      friction: ["Both dominate — power struggles over direction and control", "The Challenger's intensity may feel threatening; the Enthusiast's evasiveness may feel dishonest", "Neither sits comfortably with vulnerability", "The relationship can become competitive rather than collaborative"],
+      communication: "Both speak with force, but the Challenger confronts while the Enthusiast redirects. Without awareness, one pushes harder and the other dodges faster.",
+      growth: ["Establish clear turn-taking in decision-making", "Challenger: let your partner lighten the mood without reading it as avoidance", "Enthusiast: practice staying in a confrontation instead of reframing your way out", "Practice softness together — it's the hardest and most important skill for this pairing"]
+    },
+    '7-9': {
+      summary: "Lightness meets peace. Both partners are positive, accommodating, and avoidant of pain — creating a pleasant dynamic that may struggle with depth.",
+      strengths: ["Both are easygoing and create a conflict-free environment", "Shared preference for positivity and comfort", "The Enthusiast brings energy; the Peacemaker brings calm", "Socially harmonious and welcoming to others"],
+      friction: ["Neither partner confronts problems directly", "The Enthusiast's pace may overwhelm the Peacemaker's inertia", "The Peacemaker's passivity may frustrate the Enthusiast's desire for engagement", "Important issues can be permanently deferred by mutual avoidance"],
+      communication: "Both prefer pleasant communication, which creates warmth but prevents necessary honesty. The relationship may feel good on the surface while eroding underneath.",
+      growth: ["Establish a monthly 'honest conversation' with structured prompts", "Enthusiast: slow down and notice when your partner has checked out", "Peacemaker: practice saying 'no' to your partner's plans when you'd rather not participate", "Build the muscle of constructive conflict — start with low-stakes disagreements"]
+    },
+    '8-8': {
+      summary: "Two Challengers create a relationship of extraordinary intensity, passion, and directness. When aligned, they're unstoppable. When opposed, they're volcanic.",
+      strengths: ["Mutual respect for strength, honesty, and directness", "Both partners feel met in their intensity", "Capacity for passionate, fully-alive connection", "Neither is intimidated by the other — a rare experience for both"],
+      friction: ["Epic power struggles when neither will yield", "Conflict can become aggressive and damaging", "Vulnerability is the one thing neither partner easily offers", "The relationship can become a battleground for dominance"],
+      communication: "Both communicate with maximum directness, which creates clarity but also collision. Subtlety and gentleness may be entirely absent.",
+      growth: ["Establish absolute boundaries around conflict behavior — agree on what's never acceptable", "Practice vulnerability as the highest form of courage", "Take turns being the one who softens first", "Find shared outlets for intensity that aren't the relationship itself — physical activity, shared causes"]
+    },
+    '8-9': {
+      summary: "Strength meets softness. The Challenger and Peacemaker are drawn together by complementarity — but the same dynamic that attracts them can create an unhealthy power imbalance.",
+      strengths: ["The Peacemaker's acceptance lets the Challenger's guard down", "The Challenger's decisiveness gives the Peacemaker direction and energy", "Both are body-centered — physical presence and practical action come naturally", "A deeply protective, devoted bond when healthy"],
+      friction: ["Power imbalance — the Challenger may dominate while the Peacemaker disappears", "The Peacemaker's buried anger can erupt unexpectedly after years of accommodation", "The Challenger may mistake the Peacemaker's compliance for agreement", "The Peacemaker may feel bulldozed but unable to articulate it"],
+      communication: "The Challenger speaks with force; the Peacemaker absorbs. Without intervention, one partner's voice dominates the relationship entirely.",
+      growth: ["Challenger: actively create space for your partner's voice — ask, wait, and listen", "Peacemaker: practice disagreement as an act of love, not betrayal", "Regularly check in: 'Is this what you actually want, or what you think I want?'", "Build the Peacemaker's capacity for healthy self-assertion gradually and supportively"]
+    },
+    '9-9': {
+      summary: "Two Peacemakers create the most harmonious and gentle dynamic possible — and potentially the most inert.",
+      strengths: ["Profound mutual acceptance and unconditional positive regard", "Both prioritize harmony and create a deeply peaceful environment", "Neither pressures the other — a rare, comfortable dynamic", "Gentle, patient, and forgiving"],
+      friction: ["Inertia — neither partner initiates change, confrontation, or even decisions", "Important conversations may never happen", "Both partners may lose their individual identity in the merge", "The relationship can stagnate completely without external catalysts"],
+      communication: "Both communicate indirectly and avoid asserting preferences. Decisions become a gentle game of 'whatever you want' that frustrates both parties.",
+      growth: ["Establish a weekly 'assertion practice' — each partner names one want and one frustration", "Take turns making decisions with no 'I don't mind' allowed", "Pursue individual interests that create separate identities", "Invite gentle accountability from outside the relationship — a therapist, a trusted friend"]
+    }
+  };
+
+  const sortedKey = Math.min(tA, tB) + '-' + Math.max(tA, tB);
+  if (dynamics[sortedKey]) {
+    const d = dynamics[sortedKey];
+    // Flip framing if needed so partner A is mentioned first
+    return d;
+  }
+
+  // Fallback (shouldn't happen with complete data)
+  return {
+    summary: `The Type ${tA} and Type ${tB} dynamic brings together two distinct worldviews that, with awareness, can become a source of mutual growth and deepened understanding.`,
+    strengths: ["Complementary perspectives that broaden both partners' experience", "Opportunity for growth at the edge of each partner's comfort zone", "Distinct strengths that cover each other's blind spots"],
+    friction: ["Different core motivations can lead to misunderstanding", "Each partner's stress response may be unfamiliar to the other", "Communication styles may require active translation"],
+    communication: "Both partners may need to learn each other's emotional and communicative language to feel truly heard.",
+    growth: ["Study each other's core motivation — not just behavior, but the need beneath it", "Practice naming your emotional state clearly and often", "Create structured time for honest, low-pressure conversation", "Seek professional guidance to map your specific dynamic"]
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+// SCREEN MANAGEMENT
+// ═══════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active', 'visible');
+  });
+  const screen = document.getElementById(id);
+  screen.classList.add('active');
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      screen.classList.add('visible');
+    });
+  });
+}
+
+function selectMode(el) {
+  document.querySelectorAll('.mode-option').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+  state.mode = el.dataset.mode;
+}
+
+// ═══════════════════════════════════════════════════════
+// START ASSESSMENT
+// ═══════════════════════════════════════════════════════
+function startAssessment() {
+  const a = document.getElementById('nameA').value.trim();
+  const b = document.getElementById('nameB').value.trim();
+  state.nameA = a || 'Partner A';
+  state.nameB = b || 'Partner B';
+  state.currentPartner = 'A';
+  state.currentQuestion = 0;
+  state.answersA = new Array(questions.length).fill(0);
+  state.answersB = new Array(questions.length).fill(0);
+  document.getElementById('currentPartnerName').textContent = state.nameA;
+  loadQuestion();
+  showScreen('assessment');
+}
+
+// ═══════════════════════════════════════════════════════
+// QUESTION NAVIGATION
+// ═══════════════════════════════════════════════════════
+const categoryNames = {
+  CM: "Core Motivation",
+  CS: "Conflict Style",
+  EN: "Emotional Needs",
+  CP: "Communication Pattern",
+  SR: "Stress Response"
+};
+
+function loadQuestion() {
+  const q = questions[state.currentQuestion];
+  const qText = document.getElementById('questionText');
+  qText.classList.remove('show');
+
+  setTimeout(() => {
+    document.getElementById('questionNumber').textContent = 'Question ' + String(state.currentQuestion + 1).padStart(2, '0');
+    qText.textContent = q.text;
+    document.getElementById('categoryLabel').textContent = categoryNames[q.category] || q.category;
+    qText.classList.add('show');
+
+    const total = questions.length;
+    const current = state.currentQuestion + 1;
+    document.getElementById('progressText').textContent = current + ' of ' + total;
+    document.getElementById('progressFill').style.width = ((current / total) * 100) + '%';
+    document.getElementById('prevBtn').disabled = state.currentQuestion === 0;
+
+    const answers = state.currentPartner === 'A' ? state.answersA : state.answersB;
+    const saved = answers[state.currentQuestion];
+
+    document.querySelectorAll('.likert-option').forEach(opt => {
+      opt.classList.remove('selected');
+      if (parseInt(opt.dataset.value) === saved) {
+        opt.classList.add('selected');
+      }
+    });
+
+    const isLast = state.currentQuestion === questions.length - 1;
+    document.getElementById('nextBtn').textContent = isLast ? 'Finish' : 'Next';
+  }, 150);
+}
+
+function selectLikert(el) {
+  document.querySelectorAll('.likert-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const val = parseInt(el.dataset.value);
+  const answers = state.currentPartner === 'A' ? state.answersA : state.answersB;
+  answers[state.currentQuestion] = val;
+}
+
+function nextQuestion() {
+  const answers = state.currentPartner === 'A' ? state.answersA : state.answersB;
+  if (answers[state.currentQuestion] === 0) {
+    // Gentle nudge - highlight scale briefly
+    document.getElementById('likertScale').style.transform = 'translateX(-4px)';
+    setTimeout(() => {
+      document.getElementById('likertScale').style.transform = 'translateX(4px)';
+      setTimeout(() => {
+        document.getElementById('likertScale').style.transform = '';
+      }, 100);
+    }, 100);
+    return;
+  }
+
+  if (state.currentQuestion < questions.length - 1) {
+    state.currentQuestion++;
+    loadQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    finishPartner();
+  }
+}
+
+function prevQuestion() {
+  if (state.currentQuestion > 0) {
+    state.currentQuestion--;
+    loadQuestion();
+  }
+}
+
+function finishPartner() {
+  if (state.currentPartner === 'A') {
+    document.getElementById('partnerADone').textContent = state.nameA;
+    document.getElementById('partnerBStart').textContent = state.nameB;
+    document.getElementById('partnerBBtn').textContent = state.nameB;
+    showScreen('transition');
+  } else {
+    showScreen('calculating');
+    setTimeout(() => {
+      calculateResults();
+      renderResults();
+      showScreen('results');
+    }, 2800);
+  }
+}
+
+function startPartnerB() {
+  state.currentPartner = 'B';
+  state.currentQuestion = 0;
+  document.getElementById('currentPartnerName').textContent = state.nameB;
+  loadQuestion();
+  showScreen('assessment');
+}
+
+// ═══════════════════════════════════════════════════════
+// SCORING
+// ═══════════════════════════════════════════════════════
+function calculateScores(answers) {
+  const scores = {};
+  for (let i = 1; i <= 9; i++) scores[i] = 0;
+
+  questions.forEach((q, idx) => {
+    const val = answers[idx];
+    if (val > 0) {
+      scores[q.type] += val * q.weight;
+    }
+  });
+
+  return scores;
+}
+
+function getTopType(scores) {
+  let max = 0, type = 1;
+  for (let i = 1; i <= 9; i++) {
+    if (scores[i] > max) {
+      max = scores[i];
+      type = i;
+    }
+  }
+  return type;
+}
+
+function getWing(scores, dominant) {
+  const w = wings[dominant];
+  return scores[w[0]] >= scores[w[1]] ? w[0] : w[1];
+}
+
+function calculateResults() {
+  const scoresA = calculateScores(state.answersA);
+  const scoresB = calculateScores(state.answersB);
+  state.typeA = getTopType(scoresA);
+  state.typeB = getTopType(scoresB);
+  state.wingA = getWing(scoresA, state.typeA);
+  state.wingB = getWing(scoresB, state.typeB);
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER RESULTS
+// ═══════════════════════════════════════════════════════
+function renderResults() {
+  const tA = state.typeA;
+  const tB = state.typeB;
+  const rel = getRelationshipData(tA, tB);
+
+  document.getElementById('resultsHeadline').innerHTML =
+    `${state.nameA} &amp; ${state.nameB}`;
+  document.getElementById('resultsDynamic').textContent =
+    `Type ${tA} (${typeNames[tA]}) + Type ${tB} (${typeNames[tB]})`;
+
+  const content = document.getElementById('resultsContent');
+  content.innerHTML = `
+    <div class="results-section">
+      <div class="section-label">Individual Profiles</div>
+      <div class="type-cards">
+        <div class="type-card partner-a">
+          <div class="type-card-name">${state.nameA}</div>
+          <div class="type-card-type">Type ${tA}</div>
+          <div class="type-card-label">${typeNames[tA]}</div>
+          <div class="type-card-desc">${typeDescriptions[tA]}</div>
+          <div class="type-card-wing">Wing influence: Type ${state.wingA} (${typeNames[state.wingA]})</div>
+        </div>
+        <div class="type-card partner-b">
+          <div class="type-card-name">${state.nameB}</div>
+          <div class="type-card-type">Type ${tB}</div>
+          <div class="type-card-label">${typeNames[tB]}</div>
+          <div class="type-card-desc">${typeDescriptions[tB]}</div>
+          <div class="type-card-wing">Wing influence: Type ${state.wingB} (${typeNames[state.wingB]})</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-divider"></div>
+
+    <div class="results-section">
+      <div class="section-label">Your Relationship Dynamic</div>
+      <div class="insight-block">
+        <h3>What This Means for Your Relationship</h3>
+        <p>${rel.summary}</p>
+      </div>
+    </div>
+
+    <div class="results-section">
+      <div class="section-label">Natural Strengths</div>
+      <div class="insight-block">
+        <h3>What Works Between You</h3>
+        <ul class="insight-list strengths">
+          ${rel.strengths.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="results-section">
+      <div class="section-label">Friction Points</div>
+      <div class="insight-block">
+        <h3>Where Tension Arises</h3>
+        <ul class="insight-list friction">
+          ${rel.friction.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="results-section">
+      <div class="section-label">Communication Pattern</div>
+      <div class="insight-block">
+        <h3>How You Interpret Each Other</h3>
+        <p>${rel.communication}</p>
+      </div>
+    </div>
+
+    <div class="results-section">
+      <div class="section-label">Growth Recommendations</div>
+      <div class="insight-block">
+        <h3>Where to Focus</h3>
+        <ul class="insight-list growth">
+          ${rel.growth.map(g => `<li>${g}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  showScreen('intro');
+});
+</script>
+</body>
+</html>
